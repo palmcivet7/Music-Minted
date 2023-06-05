@@ -25,14 +25,14 @@ module.exports = {
         },
         fantom: {
             url: FTM_MAINNET_RPC_URL,
-            accounts: PRIVATE_KEY,
+            accounts: [PRIVATE_KEY],
             chainId: 250,
             blockConfirmations: 6,
             // gasPrice: 22000000000, // you can modify the gas price according to the network state
         },
         fantomTestnet: {
             url: FTM_TESTNET_RPC_URL,
-            accounts: PRIVATE_KEY,
+            accounts: [PRIVATE_KEY],
             chainId: 4002,
             blockConfirmations: 6,
         },
@@ -42,7 +42,7 @@ module.exports = {
         currency: "USD",
         outputFile: "gas-report.txt",
         noColors: true,
-        coinmarketcap: COINMARKETCAP_API_KEY,
+        // coinmarketcap: COINMARKETCAP_API_KEY,
     },
     contractSizer: {
         runOnCompile: false,
@@ -68,9 +68,9 @@ module.exports = {
     etherscan: {
         // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
         apiKey: {
-            goerli: ETHERSCAN_API_KEY,
-            sepolia: ETHERSCAN_API_KEY,
-            polygonMumbai: POLYGONSCAN_API_KEY,
+            // goerli: ETHERSCAN_API_KEY,
+            // sepolia: ETHERSCAN_API_KEY,
+            // polygonMumbai: POLYGONSCAN_API_KEY,
             fantom: FTMSCAN_API_KEY,
             fantomTestnet: FTMSCAN_API_KEY,
         },
