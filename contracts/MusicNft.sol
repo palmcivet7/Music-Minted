@@ -9,6 +9,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MusicNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
+    event Minted(address indexed _to, uint256 indexed _tokenId, string _tokenURI);
+
     using Counters for Counters.Counter;
 
     uint256 public constant MINT_PRICE_FTM = 1 * 10 ** 18; // 1 FTM
@@ -20,12 +22,14 @@ contract MusicNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     constructor() ERC721("MusicNFT", "MNFT") {}
 
     function mintToken(address _to, string memory _tokenURI) public payable {
+        require(bytes(_tokenURI).length > 0, "Token URI cannot be empty");
         require(msg.value >= MINT_PRICE_FTM, "Not enough FTM sent for minting");
         uint256 newTokenId = _tokenIdTracker.current();
+        _tokenIdTracker.increment();
         _mint(_to, newTokenId);
         _setTokenURI(newTokenId, _tokenURI);
         _minters[newTokenId] = msg.sender;
-        _tokenIdTracker.increment();
+        emit Minted(_to, newTokenId, _tokenURI);
     }
 
     function burn(uint256 tokenId) public override {
@@ -50,6 +54,7 @@ contract MusicNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
+        delete _minters[tokenId];
     }
 
     function supportsInterface(
@@ -63,4 +68,8 @@ contract MusicNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
+
+    // function minterOf(uint256 tokenId) public view returns (address) {
+    //     return _minters[tokenId];
+    // }
 }
