@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MusicNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
+contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     event Minted(address indexed _to, uint256 indexed _tokenId, string _tokenURI);
 
     using Counters for Counters.Counter;
@@ -19,7 +19,7 @@ contract MusicNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     // Mapping from token ID to minter address
     mapping(uint256 => address) private _minters;
 
-    constructor() ERC721("MusicNFT", "MNFT") {}
+    constructor() ERC721("Music Minted", "MM") {}
 
     function mintToken(address _to, string memory _tokenURI) public payable {
         require(bytes(_tokenURI).length > 0, "Token URI cannot be empty");
