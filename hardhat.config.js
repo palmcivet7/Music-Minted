@@ -67,13 +67,7 @@ module.exports = {
     },
     etherscan: {
         // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
-        apiKey: {
-            // goerli: ETHERSCAN_API_KEY,
-            // sepolia: ETHERSCAN_API_KEY,
-            // polygonMumbai: POLYGONSCAN_API_KEY,
-            fantom: FTMSCAN_API_KEY,
-            fantomTestnet: FTMSCAN_API_KEY,
-        },
+        apiKey: FTMSCAN_API_KEY,
         mocha: {
             timeout: 500000, // 500 seconds max
         },
