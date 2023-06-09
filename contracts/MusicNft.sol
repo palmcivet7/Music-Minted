@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
@@ -8,22 +8,31 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+error MusicNft__InvalidTokenUri();
+error MusicNft__NeedMoreFTMSent();
+error MusicNft__CanOnlyBeBurnedIfOwnedByMinter();
+error MusicNft__NothingToWithdraw();
+
 contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     event Minted(address indexed _to, uint256 indexed _tokenId, string _tokenURI);
 
     using Counters for Counters.Counter;
 
     uint256 public constant MINT_PRICE_FTM = 1 * 10 ** 18; // 1 FTM
-    Counters.Counter private _tokenIdTracker;
+    Counters.Counter public _tokenIdTracker;
 
     // Mapping from token ID to minter address
-    mapping(uint256 => address) private _minters;
+    mapping(uint256 => address) public _minters;
 
     constructor() ERC721("Music Minted", "MM") {}
 
     function mintToken(address _to, string memory _tokenURI) public payable {
-        require(bytes(_tokenURI).length > 0, "Token URI cannot be empty");
-        require(msg.value >= MINT_PRICE_FTM, "Not enough FTM sent for minting");
+        if (bytes(_tokenURI).length == 0) {
+            revert MusicNft__InvalidTokenUri();
+        }
+        if (msg.value < MINT_PRICE_FTM) {
+            revert MusicNft__NeedMoreFTMSent();
+        }
         uint256 newTokenId = _tokenIdTracker.current();
         _tokenIdTracker.increment();
         _mint(_to, newTokenId);
@@ -33,15 +42,17 @@ contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     }
 
     function burn(uint256 tokenId) public override {
-        require(_isApprovedOrOwner(_msgSender(), tokenId), "Caller is not owner nor approved");
-        require(_minters[tokenId] == msg.sender, "Only the original minter can burn the token");
-
+        if (!_isApprovedOrOwner(_msgSender(), tokenId) && _minters[tokenId] != msg.sender) {
+            revert MusicNft__CanOnlyBeBurnedIfOwnedByMinter();
+        }
         _burn(tokenId);
     }
 
     function withdraw() public onlyOwner {
         uint256 balance = address(this).balance;
-        require(balance > 0, "Nothing to withdraw");
+        if (balance <= 0) {
+            revert MusicNft__NothingToWithdraw();
+        }
         payable(msg.sender).transfer(balance);
     }
 
@@ -67,6 +78,10 @@ contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         uint256 tokenId
     ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
+    }
+
+    function getCurrentTokenId() public view returns (uint256) {
+        return _tokenIdTracker.current();
     }
 
     // function minterOf(uint256 tokenId) public view returns (address) {
