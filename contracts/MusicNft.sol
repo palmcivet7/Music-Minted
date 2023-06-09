@@ -26,7 +26,7 @@ contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     constructor() ERC721("Music Minted", "MM") {}
 
-    function mintToken(address _to, string memory _tokenURI) public payable {
+    function mintToken(string memory _tokenURI) public payable {
         if (bytes(_tokenURI).length == 0) {
             revert MusicNft__InvalidTokenUri();
         }
@@ -35,10 +35,10 @@ contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         }
         uint256 newTokenId = _tokenIdTracker.current();
         _tokenIdTracker.increment();
-        _mint(_to, newTokenId);
+        _mint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, _tokenURI);
         _minters[newTokenId] = msg.sender;
-        emit Minted(_to, newTokenId, _tokenURI);
+        emit Minted(msg.sender, newTokenId, _tokenURI);
     }
 
     function burn(uint256 tokenId) public override {

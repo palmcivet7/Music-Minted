@@ -23,21 +23,21 @@ describe("MusicNft", function () {
     describe("mintToken function", () => {
         it("fails if there is no token URI", async function () {
             await expect(
-                musicNft.connect(deployer).mintToken(deployer.address, "", {
+                musicNft.connect(deployer).mintToken("", {
                     value: ethers.utils.parseEther("1"), // sending 1 FTM
                 })
             ).to.be.revertedWith("MusicNft__InvalidTokenUri")
         })
         it("reverts if payment amount is less than the mint fee", async function () {
             await expect(
-                musicNft.connect(deployer).mintToken(deployer.address, "tokenURI", {
+                musicNft.connect(deployer).mintToken("tokenURI", {
                     value: ethers.utils.parseEther("0"), // sending 0 FTM
                 })
             ).to.be.revertedWith("MusicNft__NeedMoreFTMSent")
         })
         it("increments the tokenId after minting a new token", async function () {
             const beforeTokenId = await musicNft.getCurrentTokenId()
-            await musicNft.connect(deployer).mintToken(deployer.address, "tokenURI", {
+            await musicNft.connect(deployer).mintToken("tokenURI", {
                 value: ethers.utils.parseEther("1"), // sending 1 FTM
             })
             const afterTokenId = await musicNft.getCurrentTokenId()
@@ -46,10 +46,10 @@ describe("MusicNft", function () {
 
         it("emits an event and sets the correct token URI and minter", async function () {
             const tokenUri = "tokenURI"
-            const mintTx = await musicNft.connect(deployer).mintToken(deployer.address, tokenUri, {
+            const mintTx = await musicNft.connect(deployer).mintToken(tokenUri, {
                 value: ethers.utils.parseEther("1"), // sending 1 FTM
             })
-            expect(mintTx).to.emit(musicNft, "Minted").withArgs(deployer.address, 1, tokenUri)
+            expect(mintTx).to.emit(musicNft, "Minted").withArgs(1, tokenUri)
             const receipt = await mintTx.wait()
             const event = receipt.events.find((e) => e.event === "Minted")
             const tokenId = event.args[1]
@@ -62,7 +62,7 @@ describe("MusicNft", function () {
 
     describe("burn function", () => {
         it("does not allow a non-approved address (ie minter if they are still owner) to burn the token", async function () {
-            await musicNft.connect(deployer).mintToken(deployer.address, "tokenURI", {
+            await musicNft.connect(deployer).mintToken("tokenURI", {
                 value: ethers.utils.parseEther("1"), // sending 1 FTM
             })
             const currentTokenId = await musicNft.getCurrentTokenId()
@@ -73,7 +73,7 @@ describe("MusicNft", function () {
         })
         it("burns the token successfully, reducing owner's balance", async function () {
             // Mint a new token
-            await musicNft.connect(deployer).mintToken(deployer.address, "tokenURI", {
+            await musicNft.connect(deployer).mintToken("tokenURI", {
                 value: ethers.utils.parseEther("1"), // sending 1 FTM
             })
             const initialOwnerBalance = await musicNft.balanceOf(deployer.address)
@@ -89,7 +89,7 @@ describe("MusicNft", function () {
             await expect(musicNft.withdraw()).to.be.revertedWith("MusicNft__NothingToWithdraw")
         })
         it("transfers the contract's balance to the owner", async function () {
-            await musicNft.connect(deployer).mintToken(deployer.address, "tokenURI", {
+            await musicNft.connect(deployer).mintToken("tokenURI", {
                 value: ethers.utils.parseEther("1"), // sending 1 FTM
             })
             const initialBalance = await ethers.provider.getBalance(deployer.address)
