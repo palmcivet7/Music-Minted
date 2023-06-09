@@ -1,10 +1,13 @@
 const hre = require("hardhat")
+const { verify } = require(".././utils/verify")
 
 async function main() {
     const MusicNFT = await hre.ethers.getContractFactory("MusicNft")
     const musicNFT = await MusicNFT.deploy()
 
-    await musicNFT.deployed()
+    const musicNftDeployed = await musicNFT.deployed()
+
+    await verify(musicNftDeployed.address)
 
     console.log("MusicNft deployed to:", musicNFT.address)
 }
