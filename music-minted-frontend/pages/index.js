@@ -1,10 +1,11 @@
 import { useState } from "react"
 const ethers = require("ethers")
-import ConnectWallet from "../components/ConnectWallet"
+// import ConnectWallet from "../components/ConnectWallet"
 import AWS from "../config/aws-config"
 const s3 = new AWS.S3()
 import { contractAbi, contractAddress } from ".././constants/index.js"
-// const { Web3Provider } = require("@ethersproject/providers")
+import { Button, Modal, Upload, Input, Loading, useNotification } from "web3uikit"
+import styles from "../styles/Page.module.css"
 
 async function uploadFile(file, key) {
     const formData = new FormData()
@@ -25,7 +26,7 @@ async function uploadFile(file, key) {
 }
 
 // This function connects to the contract and calls the mintToken function.
-async function mintNft(metadataUrl) {
+async function mintNft(metadataUrl, handleMintNotification) {
     try {
         // We're assuming the user has MetaMask installed and is connected to it.
         const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -59,6 +60,8 @@ async function mintNft(metadataUrl) {
         const txHash = receipt.transactionHash
         const link = `https://testnet.ftmscan.com/tx/${txHash}`
         console.log("Check your transaction on FtmScan: ", link)
+        handleMintNotification(txHash)
+        return receipt
     } catch (error) {
         console.error("There's been an error minting the NFT: ", error)
     }
@@ -67,18 +70,39 @@ async function mintNft(metadataUrl) {
 export default function Page() {
     const [checked, setChecked] = useState(false)
     const [formVisible, setFormVisible] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)
     const [audioFile, setAudioFile] = useState()
     const [imageFile, setImageFile] = useState()
-    const [metadata, setMetadata] = useState({
+    const initialMetadata = {
         track: "",
         artist: "",
         genre: "",
         released: "",
         audio: "",
         image: "",
-    })
+    }
+    const [metadata, setMetadata] = useState(initialMetadata)
 
+    const dispatch = useNotification()
     const [isMinting, setIsMinting] = useState(false)
+
+    const handleMintNotification = (txHash) => {
+        const link = `https://testnet.ftmscan.com/tx/${txHash}`
+
+        dispatch({
+            type: "success",
+            message: (
+                <p>
+                    Minting successful! Check your transaction on FtmScan:
+                    <a href={link} target="_blank" rel="noreferrer">
+                        {link}
+                    </a>
+                </p>
+            ),
+            title: "Minting Completed",
+            position: "topR",
+        })
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -87,6 +111,7 @@ export default function Page() {
             return
         }
 
+        setIsModalVisible(false)
         setIsMinting(true)
 
         try {
@@ -118,20 +143,132 @@ export default function Page() {
 
             console.log("Submitted!", { finalMetadata, audioUrl, imageUrl, metadataUrl })
 
-            mintNft(metadataUrl).catch((error) => console.error("Error minting NFT:", error))
+            await mintNft(metadataUrl, handleMintNotification).catch((error) =>
+                console.error("Error minting NFT:", error)
+            )
         } catch (error) {
             console.error("File upload failed:", error)
         } finally {
+            setMetadata(initialMetadata)
+            setChecked(false)
             setIsMinting(false)
         }
     }
 
     return (
-        <div>
-            <h1>Music Minted</h1>
-            <ConnectWallet />
-            <button onClick={() => setFormVisible(true)}>Mint NFT</button>
-            {formVisible && (
+        <div className={styles.content}>
+            {!isMinting && !isModalVisible && (
+                <Button
+                    onClick={() => setIsModalVisible(true)}
+                    text="Mint NFT"
+                    theme="outline"
+                    size="xl"
+                />
+            )}
+            {isMinting && (
+                <div className={styles.minting}>
+                    <Loading
+                        fontSize={12}
+                        size={100}
+                        spinnerColor="#2E7DAF"
+                        spinnerType="wave"
+                        text="Minting..."
+                    />
+                </div>
+            )}
+            <Modal
+                isVisible={isModalVisible && !isMinting}
+                onCancel={() => {
+                    setMetadata(initialMetadata)
+                    setChecked(false)
+                    setIsModalVisible(false)
+                }}
+                onCloseButtonPressed={() => {
+                    setMetadata(initialMetadata)
+                    setChecked(false)
+                    setIsModalVisible(false)
+                }}
+                okText="Submit"
+                title="Create NFT"
+                onOk={handleSubmit}
+            >
+                <div className={styles.form}>
+                    <Input
+                        label="Track"
+                        width="100%"
+                        value={metadata.track}
+                        onChange={(e) =>
+                            setMetadata((prev) => ({ ...prev, track: e.target.value }))
+                        }
+                        validation={{
+                            required: true,
+                        }}
+                    />
+                    <Input
+                        label="Artist"
+                        width="100%"
+                        value={metadata.artist}
+                        onChange={(e) =>
+                            setMetadata((prev) => ({ ...prev, artist: e.target.value }))
+                        }
+                        validation={{
+                            required: true,
+                        }}
+                    />
+                    <Input
+                        label="Genre"
+                        width="100%"
+                        value={metadata.genre}
+                        onChange={(e) =>
+                            setMetadata((prev) => ({ ...prev, genre: e.target.value }))
+                        }
+                        validation={{
+                            required: true,
+                        }}
+                    />
+                    <Input
+                        label="Year"
+                        width="100%"
+                        type="number"
+                        min="1800"
+                        max="2222"
+                        value={metadata.released}
+                        onChange={(e) =>
+                            setMetadata((prev) => ({ ...prev, released: e.target.value }))
+                        }
+                        validation={{
+                            required: true,
+                        }}
+                    />
+                    <div>
+                        <p>Upload audio file</p>
+                        <Upload
+                            onChange={(file) => setAudioFile(file)}
+                            theme="textOnly"
+                            descriptionText="Only audio files are accepted"
+                            acceptedFiles="audio/*"
+                        />
+                    </div>
+                    <div>
+                        <p>Upload cover art</p>
+                        <Upload
+                            onChange={(file) => setImageFile(file)}
+                            theme="withIcon"
+                            descriptionText="Only image files are accepted"
+                            acceptedFiles="image/jpeg, image/png, image/gif"
+                        />
+                    </div>
+                    <div className={styles.certify}>
+                        <p>I certify that I own the rights to this music</p>
+                        <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => setChecked((prev) => !prev)}
+                        />
+                    </div>
+                </div>
+            </Modal>
+            {/* {formVisible && (
                 <div>
                     <button
                         onClick={() => setFormVisible(false)}
@@ -199,7 +336,7 @@ export default function Page() {
                         </button>
                     </form>
                 </div>
-            )}
+            )} */}
         </div>
     )
 }
