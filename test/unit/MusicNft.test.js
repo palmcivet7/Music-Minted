@@ -2,11 +2,16 @@ const { ethers } = require("hardhat")
 const { assert, expect } = require("chai")
 
 describe("MusicNft", function () {
-    let musicNft, accounts
+    let musicNft, mockV3Aggregator, accounts
 
     beforeEach(async function () {
         accounts = await ethers.getSigners()
         deployer = accounts[0]
+
+        const MockV3Aggregator = await ethers.getContractFactory("MockV3Aggregator")
+        mockV3Aggregator = await MockV3Aggregator.deploy(18, ethers.utils.parseEther("1")) // 18 decimals, 1 FTM/USD
+        await mockV3Aggregator.deployed()
+
         const MusicNft = await ethers.getContractFactory("MusicNft")
         musicNft = await MusicNft.deploy()
         await musicNft.deployed()
@@ -28,13 +33,15 @@ describe("MusicNft", function () {
                 })
             ).to.be.revertedWith("MusicNft__InvalidTokenUri")
         })
-        it("reverts if payment amount is less than the mint fee", async function () {
+        it("reverts if payment amount is less than the dynamically calculated mint fee", async function () {
+            const mintPrice = await musicNft.getMintPriceFTM()
             await expect(
                 musicNft.connect(deployer).mintToken("tokenURI", {
-                    value: ethers.utils.parseEther("0"), // sending 0 FTM
+                    value: mintPrice.sub(1), // sending less than required FTM
                 })
             ).to.be.revertedWith("MusicNft__NeedMoreFTMSent")
         })
+
         it("increments the tokenId after minting a new token", async function () {
             const beforeTokenId = await musicNft.getCurrentTokenId()
             await musicNft.connect(deployer).mintToken("tokenURI", {

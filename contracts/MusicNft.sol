@@ -27,7 +27,8 @@ contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     mapping(uint256 => address) public _minters;
 
     constructor() ERC721("Music Minted", "MM") {
-        priceFeed = AggregatorV3Interface(0xe04676B9A9A2973BCb0D1478b5E1E9098BBB7f3D);
+        priceFeed = AggregatorV3Interface(0x5FbDB2315678afecb367f032d93F642f64180aa3);
+        // MockV3Aggregator = 0x5FbDB2315678afecb367f032d93F642f64180aa3
         // FTM/USD FTM TESTNET = 0xe04676B9A9A2973BCb0D1478b5E1E9098BBB7f3D
         // FTM/USD FTM MAINNET = 0xf4766552d15ae4d256ad41b6cf2933482b0680dc
     }
