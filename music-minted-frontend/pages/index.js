@@ -39,16 +39,26 @@ async function mintNft(metadataUrl) {
         // We create a new Contract instance
         const contract = new ethers.Contract(contractAddress, contractAbi, signer)
 
+        // We call the getMintPriceFTM function to get the current mint price
+        const mintPriceWei = await contract.getMintPriceFTM()
+        const mintPriceEther = ethers.utils.formatEther(mintPriceWei) // convert Wei to Ether
+
         // We call the mintToken function and pass the metadataUrl
         // We also attach the FTM as value in the transaction
-        const weiValue = ethers.utils.parseEther("1") // converts 1 FTM to wei
-        const tx = await contract.mintToken(metadataUrl, { value: weiValue })
+        const tx = await contract.mintToken(metadataUrl, {
+            value: ethers.utils.parseEther(mintPriceEther),
+        })
 
         // We wait for the transaction to be mined
-        await tx.wait()
+        const receipt = await tx.wait()
 
         // Once the transaction is mined we can consider the NFT minted
         console.log("NFT minted!", metadataUrl)
+
+        // Include the link to the NFT on FtmScan using the transaction hash
+        const txHash = receipt.transactionHash
+        const link = `https://testnet.ftmscan.com/tx/${txHash}`
+        console.log("Check your transaction on FtmScan: ", link)
     } catch (error) {
         console.error("There's been an error minting the NFT: ", error)
     }

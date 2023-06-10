@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 error MusicNft__InvalidTokenUri();
 error MusicNft__NeedMoreFTMSent();
@@ -18,19 +19,38 @@ contract MusicNft is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     using Counters for Counters.Counter;
 
-    uint256 public constant MINT_PRICE_FTM = 1 * 10 ** 18; // 1 FTM
+    uint256 public constant MINT_PRICE_USD = 1; // 1 USD
     Counters.Counter public _tokenIdTracker;
+    AggregatorV3Interface internal priceFeed;
 
     // Mapping from token ID to minter address
     mapping(uint256 => address) public _minters;
 
-    constructor() ERC721("Music Minted", "MM") {}
+    constructor() ERC721("Music Minted", "MM") {
+        priceFeed = AggregatorV3Interface(0xe04676B9A9A2973BCb0D1478b5E1E9098BBB7f3D);
+        // FTM/USD FTM TESTNET = 0xe04676B9A9A2973BCb0D1478b5E1E9098BBB7f3D
+        // FTM/USD FTM MAINNET = 0xf4766552d15ae4d256ad41b6cf2933482b0680dc
+    }
+
+    function getLatestPrice() public view returns (int) {
+        (, int price, , , ) = priceFeed.latestRoundData();
+        return price;
+    }
+
+    function getMintPriceFTM() public view returns (uint256) {
+        int256 currentFTMPrice = getLatestPrice();
+        uint256 decimals = 18; // This represents 1 FTM in Wei
+        // Chainlink's price feeds come with 8 decimal places
+        // So we need to multiply 1 USD with 10^8 to get the correct price
+        uint256 priceForOneUSDInWei = (10 ** decimals * 10 ** 8) / uint256(currentFTMPrice);
+        return priceForOneUSDInWei;
+    }
 
     function mintToken(string memory _tokenURI) public payable {
         if (bytes(_tokenURI).length == 0) {
             revert MusicNft__InvalidTokenUri();
         }
-        if (msg.value < MINT_PRICE_FTM) {
+        if (msg.value < getMintPriceFTM()) {
             revert MusicNft__NeedMoreFTMSent();
         }
         uint256 newTokenId = _tokenIdTracker.current();

@@ -177,7 +177,7 @@ export const contractAbi = [
     },
     {
         inputs: [],
-        name: "MINT_PRICE_FTM",
+        name: "MINT_PRICE_USD",
         outputs: [
             {
                 internalType: "uint256",
@@ -292,6 +292,32 @@ export const contractAbi = [
     {
         inputs: [],
         name: "getCurrentTokenId",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "getLatestPrice",
+        outputs: [
+            {
+                internalType: "int256",
+                name: "",
+                type: "int256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "getMintPriceFTM",
         outputs: [
             {
                 internalType: "uint256",
@@ -556,4 +582,4 @@ export const contractAbi = [
     },
 ]
 
-export const contractAddress = "0x42B8260A6eaFF414653352B3D1831644Ca90Fc7C"
+export const contractAddress = "0x95B948DbA9Cb230eb289080D4C2B4DB0A5a7Afa1" // ftm testnet
