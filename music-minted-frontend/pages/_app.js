@@ -7,6 +7,11 @@ import { NotificationProvider } from "web3uikit"
 export default function App({ Component, pageProps }) {
     return (
         <div>
+            <style jsx global>{`
+                body {
+                    background-color: #ebf8ff;
+                }
+            `}</style>
             <Head>
                 <title>Music Minted</title>
                 <meta name="description" content="An application for minting music NFTs" />

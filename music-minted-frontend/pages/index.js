@@ -1,11 +1,12 @@
 import { useState } from "react"
 const ethers = require("ethers")
-// import ConnectWallet from "../components/ConnectWallet"
 import AWS from "../config/aws-config"
 const s3 = new AWS.S3()
 import { contractAbi, contractAddress } from ".././constants/index.js"
 import { Button, Modal, Upload, Input, Loading, useNotification } from "web3uikit"
 import styles from "../styles/Page.module.css"
+import Footer from ".././components/Footer"
+import Paragraph from ".././components/Paragraph"
 
 async function uploadFile(file, key) {
     const formData = new FormData()
@@ -156,7 +157,8 @@ export default function Page() {
     }
 
     return (
-        <div className={styles.content}>
+        <div className={styles.content} style={{ backgroundColor: "#ebf8ff" }}>
+            <div style={{ height: "100px" }} />
             {!isMinting && !isModalVisible && (
                 <Button
                     onClick={() => setIsModalVisible(true)}
@@ -268,75 +270,9 @@ export default function Page() {
                     </div>
                 </div>
             </Modal>
-            {/* {formVisible && (
-                <div>
-                    <button
-                        onClick={() => setFormVisible(false)}
-                        style={{ position: "absolute", right: 0 }}
-                    >
-                        X
-                    </button>
-                    <p>I certify I own the rights to this music</p>
-                    <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => setChecked((prev) => !prev)}
-                    />
-
-                    <input
-                        type="file"
-                        accept="audio/*"
-                        onChange={(e) => setAudioFile(e.target.files[0])}
-                    />
-
-                    <input
-                        type="file"
-                        accept="image/jpeg, image/png, image/gif"
-                        onChange={(e) => setImageFile(e.target.files[0])}
-                    />
-
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            value={metadata.track}
-                            onChange={(e) =>
-                                setMetadata((prev) => ({ ...prev, track: e.target.value }))
-                            }
-                            placeholder="Track"
-                        />
-                        <input
-                            type="text"
-                            value={metadata.artist}
-                            onChange={(e) =>
-                                setMetadata((prev) => ({ ...prev, artist: e.target.value }))
-                            }
-                            placeholder="Artist"
-                        />
-                        <input
-                            type="text"
-                            value={metadata.genre}
-                            onChange={(e) =>
-                                setMetadata((prev) => ({ ...prev, genre: e.target.value }))
-                            }
-                            placeholder="Genre"
-                        />
-                        <input
-                            type="number"
-                            min="1800"
-                            max="2222"
-                            value={metadata.released}
-                            onChange={(e) =>
-                                setMetadata((prev) => ({ ...prev, released: e.target.value }))
-                            }
-                            placeholder="Year"
-                        />
-
-                        <button type="submit" disabled={isMinting}>
-                            {isMinting ? "Minting..." : "Submit"}
-                        </button>
-                    </form>
-                </div>
-            )} */}
+            <div style={{ height: "100px" }} />
+            <Paragraph />
+            <Footer />
         </div>
     )
 }

@@ -6,6 +6,7 @@
     width: 100%;
     padding: 11px;
     grid-template-columns: 1fr 1fr 1fr;
+    background-color: #ebf8ff;
 }
 
 .title {
@@ -15,6 +16,7 @@
     font-size: 50px;
     grid-column: 2;
     justify-self: center;
+    color: #1a365d;
 }
 
 .emptyDiv {

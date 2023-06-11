@@ -1,0 +1,11 @@
+.paragraph {
+    font-family: "Helvetica", sans-serif;
+    color: #1a365d;
+    font-size: 22px;
+    text-align: center;
+    width: 800px;
+    background-color: white; /* Add white background */
+    border-radius: 100px; /* Make the corners rounded */
+    padding: 33px; /* Give some space around the text */
+    margin: 0 auto;
+}
