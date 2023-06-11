@@ -111,6 +111,14 @@ export default function Page() {
             alert("Please certify the rights, upload an audio file and an image file!")
             return
         }
+        if (!audioFile || audioFile.type.indexOf("audio/") !== 0) {
+            alert("Please upload a valid audio file!")
+            return
+        }
+        if (!imageFile || !["image/jpeg", "image/png", "image/gif"].includes(imageFile.type)) {
+            alert("Please upload a valid image file (jpeg, png, or gif)!")
+            return
+        }
 
         setIsModalVisible(false)
         setIsMinting(true)
@@ -171,7 +179,7 @@ export default function Page() {
                 <div className={styles.minting}>
                     <Loading
                         fontSize={12}
-                        size={100}
+                        size={12}
                         spinnerColor="#2E7DAF"
                         spinnerType="wave"
                         text="Minting..."
