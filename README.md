@@ -1,5 +1,5 @@
 # Music Minted: An application for minting music NFTs
-This project contains a smart contract based application for **minting music NFTs**. The price to mint is $1 and ensured by using [Chainlink Pricefeeds](https://docs.chain.link/data-feeds/.
+This project contains a smart contract based application for **minting music NFTs**. The price to mint is $1 and ensured by using [Chainlink Pricefeeds](https://docs.chain.link/data-feeds/).
 
 [Live demo on Fantom Testnet](https://testnet.ftmscan.com/address/0x95b948dba9cb230eb289080d4c2b4db0a5a7afa1#code).
 
