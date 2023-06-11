@@ -15,6 +15,8 @@ app.post("/upload", upload.single("file"), function (req, res, next) {
         Key: req.body.key,
         Body: req.file.buffer,
         ACL: "public-read",
+        ContentType: req.file.mimetype,
+        ContentDisposition: "inline",
     }
 
     s3.upload(params, function (err, data) {
