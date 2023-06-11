@@ -28,7 +28,7 @@ To run the unit tests for the MusicNft contract, first make sure you have deploy
 ```
 yarn hardhat deploy --tags mocks
 ```
-Deploy the MusicNft contract first using the following command:
+Deploy the MusicNft contract using the following command:
 ```
 yarn hardhat deploy --tags MusicNft
 ```
