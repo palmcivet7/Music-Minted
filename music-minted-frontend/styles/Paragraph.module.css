@@ -4,8 +4,8 @@
     font-size: 22px;
     text-align: center;
     width: 800px;
-    background-color: white; /* Add white background */
-    border-radius: 100px; /* Make the corners rounded */
-    padding: 33px; /* Give some space around the text */
+    background-color: white;
+    border-radius: 100px;
+    padding: 33px;
     margin: 0 auto;
 }
