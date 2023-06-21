@@ -87,6 +87,24 @@ export default function Page() {
     const dispatch = useNotification()
     const [isMinting, setIsMinting] = useState(false)
 
+    const mintNftWithCheck = async () => {
+        if (typeof window.ethereum === "undefined") {
+            alert("Please install MetaMask first.")
+            return
+        }
+
+        try {
+            await window.ethereum.request({ method: "eth_requestAccounts" })
+
+            // If MetaMask connected successfully, you can open the mint modal
+            setIsModalVisible(true)
+        } catch (err) {
+            // User has denied account access to DApp...
+            console.error(err)
+            alert("Please allow access to your MetaMask accounts.")
+        }
+    }
+
     const handleMintNotification = (txHash) => {
         const link = `https://testnet.ftmscan.com/tx/${txHash}`
 
@@ -168,12 +186,7 @@ export default function Page() {
         <div className={styles.content} style={{ backgroundColor: "#ebf8ff" }}>
             <div style={{ height: "100px" }} />
             {!isMinting && !isModalVisible && (
-                <Button
-                    onClick={() => setIsModalVisible(true)}
-                    text="Mint NFT"
-                    theme="outline"
-                    size="xl"
-                />
+                <Button onClick={mintNftWithCheck} text="Mint NFT" theme="outline" size="xl" />
             )}
             {isMinting && (
                 <div className={styles.minting}>
