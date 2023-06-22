@@ -3,6 +3,9 @@ const multer = require("multer")
 const cors = require("cors")
 const s3 = require("./s3")
 const app = express()
+
+app.enable("trust proxy")
+
 app.use(cors())
 const upload = multer({
     storage: multer.memoryStorage(),
