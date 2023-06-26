@@ -16,7 +16,7 @@ async function uploadFile(file, key) {
     const response = await fetch("http://localhost:8080/upload", {
         method: "POST",
         body: formData,
-    }) // http://54.242.213.11:8080/upload
+    }) // https://musicminted.palmcivet.dev/upload
 
     if (!response.ok) {
         throw new Error("File upload failed")
