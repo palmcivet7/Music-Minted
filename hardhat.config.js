@@ -18,6 +18,7 @@ module.exports = {
         hardhat: {
             chainId: 31337,
             blockConfirmations: 1,
+            priceFeedAddress: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
         },
         localhost: {
             chainId: 31337,
@@ -28,6 +29,7 @@ module.exports = {
             accounts: [PRIVATE_KEY],
             chainId: 250,
             blockConfirmations: 6,
+            priceFeedAddress: "0xf4766552d15ae4d256ad41b6cf2933482b0680dc",
             // gasPrice: 22000000000, // you can modify the gas price according to the network state
         },
         fantomTestnet: {
@@ -35,6 +37,7 @@ module.exports = {
             accounts: [PRIVATE_KEY],
             chainId: 4002,
             blockConfirmations: 6,
+            priceFeedAddress: "0xe04676B9A9A2973BCb0D1478b5E1E9098BBB7f3D",
         },
     },
     gasReporter: {
