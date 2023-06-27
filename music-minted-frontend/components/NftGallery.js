@@ -30,10 +30,14 @@ const NftGallery = () => {
 
                 let tempTokens = []
                 for (let i = 0; i < totalSupply; i++) {
-                    let owner = await contract.ownerOf(i)
-                    if (owner.toLowerCase() === address.toLowerCase()) {
-                        let tokenUri = await contract.tokenURI(i)
-                        tempTokens.push({ uri: tokenUri, id: i })
+                    try {
+                        let owner = await contract.ownerOf(i)
+                        if (owner.toLowerCase() === address.toLowerCase()) {
+                            let tokenUri = await contract.tokenURI(i)
+                            tempTokens.push({ uri: tokenUri, id: i })
+                        }
+                    } catch (error) {
+                        console.error(`Failed to fetch token with ID ${i}: `, error)
                     }
                 }
 
