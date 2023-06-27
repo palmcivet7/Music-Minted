@@ -22,3 +22,13 @@
 .page {
     background-color: #ebf8ff;
 }
+
+.subheading {
+    text-align: center;
+    font-family: "Helvetica", sans-serif;
+    font-weight: bold;
+    font-size: 33px;
+    grid-column: 2;
+    justify-self: center;
+    color: #1a365d;
+}
