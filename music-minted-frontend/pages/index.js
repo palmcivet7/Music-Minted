@@ -87,17 +87,22 @@ export default function Page() {
     const dispatch = useNotification()
     const [isMinting, setIsMinting] = useState(false)
 
+    const [correctNetwork, setCorrectNetwork] = useState(false)
+
     const checkNetwork = async () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const network = await provider.getNetwork()
 
-        if (network.chainId !== 250 || 4002) {
+        if (network.chainId !== 250 && network.chainId !== 4002) {
             dispatch({
                 type: "warning",
                 message: "You are connected to the wrong network. Please switch to Fantom network.",
                 title: "Network Warning",
                 position: "topR",
             })
+            setCorrectNetwork(false) // Incorrect network
+        } else {
+            setCorrectNetwork(true) // Correct network
         }
     }
 
@@ -200,7 +205,7 @@ export default function Page() {
     return (
         <div className={styles.content} style={{ backgroundColor: "#ebf8ff" }}>
             <div style={{ height: "100px" }} />
-            {!isMinting && !isModalVisible && (
+            {!isMinting && (
                 <Button onClick={mintNftWithCheck} text="Mint NFT" theme="outline" size="xl" />
             )}
             {isMinting && (
@@ -215,7 +220,7 @@ export default function Page() {
                 </div>
             )}
             <Modal
-                isVisible={isModalVisible && !isMinting}
+                isVisible={isModalVisible && correctNetwork && !isMinting}
                 onCancel={() => {
                     setMetadata(initialMetadata)
                     setChecked(false)
