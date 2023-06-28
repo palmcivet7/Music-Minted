@@ -87,6 +87,20 @@ export default function Page() {
     const dispatch = useNotification()
     const [isMinting, setIsMinting] = useState(false)
 
+    const checkNetwork = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const network = await provider.getNetwork()
+
+        if (network.chainId !== 250 || 4002) {
+            dispatch({
+                type: "warning",
+                message: "You are connected to the wrong network. Please switch to Fantom network.",
+                title: "Network Warning",
+                position: "topR",
+            })
+        }
+    }
+
     const mintNftWithCheck = async () => {
         if (typeof window.ethereum === "undefined") {
             alert("Please install MetaMask first.")
@@ -95,6 +109,7 @@ export default function Page() {
 
         try {
             await window.ethereum.request({ method: "eth_requestAccounts" })
+            await checkNetwork() // Call checkNetwork here
 
             // If MetaMask connected successfully, you can open the mint modal
             setIsModalVisible(true)
