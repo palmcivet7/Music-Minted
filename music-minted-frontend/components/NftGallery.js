@@ -9,12 +9,17 @@ const NftGallery = () => {
 
     // Connect to the wallet and set the current address
     useEffect(() => {
-        const fetchAddress = async () => {
-            if (typeof window.ethereum !== "undefined") {
-                const provider = new ethers.providers.Web3Provider(window.ethereum)
-                const signer = provider.getSigner()
-                const addr = await signer.getAddress()
-                setAddress(addr)
+        async function fetchAddress() {
+            if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+                try {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum)
+                    const signer = provider.getSigner()
+                    const addr = await signer.getAddress()
+                    setAddress(addr)
+                } catch (err) {
+                    console.error("You must connect your wallet", err)
+                    // Display a user-friendly message here
+                }
             }
         }
 
