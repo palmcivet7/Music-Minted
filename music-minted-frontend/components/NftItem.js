@@ -35,14 +35,17 @@ function NftItem({ tokenUri, tokenId }) {
             />
             <h2>{track}</h2>
             <h3>{artist}</h3>
-            <p>{genre}</p>
-            <p>{released}</p>
+            <p>
+                Genre: {genre}
+                <br />
+                Released: {released}
+            </p>
             <a
                 href={`https://testnet.ftmscan.com/token/0x95b948dba9cb230eb289080d4c2b4db0a5a7afa1?a=${tokenId}`}
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                View on FtmScan
+                View NFT on FtmScan
             </a>
         </div>
     )

@@ -1,15 +1,29 @@
 import { ConnectButton } from "web3uikit"
-import Link from "next/link"
+import Navigation from "./Navigation"
 import styles from "../styles/Header.module.css"
+// import Link from "next/link"
+// import { Button } from "web3uikit"
+// import Router from "next/router"
 
 export default function Header() {
     return (
-        <div className={styles.header}>
-            <div className={styles.emptyDiv}></div>
-            <h1 className={styles.title}>Music Minted</h1>
-            <div className={styles.buttonDiv}>
-                <ConnectButton />
+        <div>
+            <div className={styles.header}>
+                <div className={styles.emptyDiv}></div>
+                <h1 className={styles.title}>Music Minted</h1>
+                <div className={styles.buttonDiv}>
+                    <ConnectButton className={styles.connectButton} />
+                    {/* <div className={styles.buttonWrapper}>
+                        <Button
+                            color="blue"
+                            onClick={() => Router.push("/gallery")}
+                            text="View NFTs"
+                            theme="colored"
+                        />
+                    </div> */}
+                </div>
             </div>
+            <Navigation />
         </div>
     )
 }

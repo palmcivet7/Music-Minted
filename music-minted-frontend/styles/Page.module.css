@@ -32,3 +32,28 @@
     justify-self: center;
     color: #1a365d;
 }
+
+.navigation {
+    max-width: 100%;
+    font-family: "Helvetica", sans-serif;
+    background: #1a365d;
+    padding: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.link {
+    font-family: "Helvetica", sans-serif;
+    margin: 4px;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 33px;
+    /* background: #2b6cb0; */
+}
+
+.link:hover {
+    background-color: #2c5282;
+}

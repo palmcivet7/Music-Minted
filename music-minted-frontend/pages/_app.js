@@ -11,6 +11,11 @@ export default function App({ Component, pageProps }) {
                 body {
                     background-color: #ebf8ff;
                 }
+                html,
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
             `}</style>
             <Head>
                 <title>Music Minted</title>
