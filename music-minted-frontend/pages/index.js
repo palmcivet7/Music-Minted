@@ -1,7 +1,7 @@
 import { useState } from "react"
 const ethers = require("ethers")
-import AWS from "../config/aws-config"
-const s3 = new AWS.S3()
+// import AWS from "../config/aws-config"
+// const s3 = new AWS.S3()
 import { contractAbi, contractAddress } from ".././constants/index.js"
 import { Button, Modal, Upload, Input, Loading, useNotification } from "web3uikit"
 import styles from "../styles/Page.module.css"
