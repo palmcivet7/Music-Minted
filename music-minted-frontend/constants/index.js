@@ -582,4 +582,6 @@ export const contractAbi = [
     },
 ]
 
-export const contractAddress = "0x95B948DbA9Cb230eb289080D4C2B4DB0A5a7Afa1" // ftm testnet
+export const contractAddress = "0x8A601b3048b67f7b0cad8E2a14e0f4719e810B51" // ftm mainnet
+// "0x8A601b3048b67f7b0cad8E2a14e0f4719e810B51" // ftm mainnet
+// "0x95B948DbA9Cb230eb289080D4C2B4DB0A5a7Afa1" // ftm testnet

@@ -1,7 +1,9 @@
 # Music Minted: An application for minting music NFTs
-This project contains a smart contract based application for **minting music NFTs**. The price to mint is $1 and ensured by using [Chainlink Pricefeeds](https://docs.chain.link/data-feeds/).
+This project contains a smart contract based application for **minting music NFTs** on the Fantom blockchain. The price to mint is $1 and ensured by using [Chainlink Pricefeeds](https://docs.chain.link/data-feeds/).
 
-[Live demo on Fantom Testnet](https://testnet.ftmscan.com/address/0x95b948dba9cb230eb289080d4c2b4db0a5a7afa1#code).
+[Live on Fantom Mainnet](https://ftmscan.com/address/0x8A601b3048b67f7b0cad8E2a14e0f4719e810B51#code)
+
+[Live demo on Fantom Testnet](https://testnet.ftmscan.com/address/0x95b948dba9cb230eb289080d4c2b4db0a5a7afa1#code)
 
 ## Table of Contents
 - [Overview](#overview)
@@ -14,7 +16,7 @@ This project contains a smart contract based application for **minting music NFT
 
 
 ## Overview
-Music Minted is an application for musicians to mint their music into nfts. It costs $1 per mint, and uses Chainlink price feeds to ensure that. When files are submitted, the audio and cover art are uploaded to AWS S3, and are then included in a json file along with the other submitted info. This metadata json file gets passed to the nft contract as the token uri.
+Music Minted is a Fantom-based application for musicians to mint their music into nfts. It costs $1 per mint, and uses Chainlink price feeds to ensure that. When files are submitted, the audio and cover art are uploaded to AWS S3, and are then included in a json file along with the other submitted info. This metadata json file gets passed to the nft contract as the token uri.
 
 ## Installation
 To install the necessary dependencies, first ensure that you have [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) installed. Then, run the following command in the project's root directory:
@@ -28,6 +30,7 @@ To run the unit tests for the MusicNft contract, first make sure you have deploy
 ```
 yarn hardhat deploy --tags mocks
 ```
+Then make sure you have included the MockV3Aggregator contract address as a constructor argument in the deploy script.
 Deploy the MusicNft contract using the following command:
 ```
 yarn hardhat deploy --tags MusicNft
