@@ -126,7 +126,7 @@ export default function Page() {
     }
 
     const handleMintNotification = (txHash) => {
-        const link = `https://testnet.ftmscan.com/tx/${txHash}`
+        const link = `https://ftmscan.com/tx/${txHash}`
 
         dispatch({
             type: "success",
