@@ -59,7 +59,7 @@ async function mintNft(metadataUrl, handleMintNotification) {
 
         // Include the link to the NFT on FtmScan using the transaction hash
         const txHash = receipt.transactionHash
-        const link = `https://testnet.ftmscan.com/tx/${txHash}`
+        const link = `https://ftmscan.com/tx/${txHash}`
         console.log("Check your transaction on FtmScan: ", link)
         handleMintNotification(txHash)
         return receipt
