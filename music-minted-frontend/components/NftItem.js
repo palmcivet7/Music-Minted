@@ -41,7 +41,8 @@ function NftItem({ tokenUri, tokenId }) {
                 Released: {released}
             </p>
             <a
-                href={`https://testnet.ftmscan.com/token/0x95b948dba9cb230eb289080d4c2b4db0a5a7afa1?a=${tokenId}`}
+                href={`https://ftmscan.com/token/0x8a601b3048b67f7b0cad8e2a14e0f4719e810b51?a=${tokenId}`}
+                // href={`https://testnet.ftmscan.com/token/0x95b948dba9cb230eb289080d4c2b4db0a5a7afa1?a=${tokenId}`}
                 target="_blank"
                 rel="noopener noreferrer"
             >
