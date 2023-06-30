@@ -13,14 +13,6 @@ export default function Header() {
                 <h1 className={styles.title}>Music Minted</h1>
                 <div className={styles.buttonDiv}>
                     <ConnectButton className={styles.connectButton} />
-                    {/* <div className={styles.buttonWrapper}>
-                        <Button
-                            color="blue"
-                            onClick={() => Router.push("/gallery")}
-                            text="View NFTs"
-                            theme="colored"
-                        />
-                    </div> */}
                 </div>
             </div>
             <Navigation />
